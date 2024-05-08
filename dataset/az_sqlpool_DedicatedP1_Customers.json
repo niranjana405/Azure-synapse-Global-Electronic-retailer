@@ -3,7 +3,10 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "global-electronics-retailers-ws-WorkspaceDefaultSqlServer",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"DBName": "DedicatedP1"
+			}
 		},
 		"annotations": [],
 		"type": "AzureSqlDWTable",

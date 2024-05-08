@@ -9,10 +9,7 @@
 		"type": "Parquet",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation",
-				"fileName": "part-00000-ecd63196-5bf9-42a9-8aab-56d3ec612858-c000.snappy.parquet",
-				"folderPath": "GlobalElectronicTrainingData/CustomersTrainingData",
-				"fileSystem": "global-electronic-files"
+				"type": "AzureBlobFSLocation"
 			},
 			"compressionCodec": "snappy"
 		},
