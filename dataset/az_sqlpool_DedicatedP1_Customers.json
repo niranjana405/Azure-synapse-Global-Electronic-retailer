@@ -1,0 +1,16 @@
+{
+	"name": "az_sqlpool_DedicatedP1_Customers",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "global-electronics-retailers-ws-WorkspaceDefaultSqlServer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Customers1"
+		}
+	}
+}
