@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "global-electronics-retailers-ws"
+		},
+		"global-electronics-retailers-ws-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:global-electronics-retailers-ws.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"global-electronics-retailers-ws-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://globalelectronicsadls.dfs.core.windows.net"
+		}
+	}
+}
