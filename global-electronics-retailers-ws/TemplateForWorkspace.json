@@ -134,12 +134,12 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script 4')]",
+			"name": "[concat(parameters('workspaceName'), '/SQL script 5')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "-- This is auto-generated code\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://globalelectronicsadls.dfs.core.windows.net/global-electronic-files/GlobalElectronicTrainingData/partionedData/PRODUCTKEY=1/**',\n        FORMAT = 'CSV',\n        PARSER_VERSION = '2.0',\nHEADER_ROW=TRUE\n    ) AS [result]\n",
+					"query": "-- Order volume trend by month\nSELECT \n    EXTRACT(MONTH FROM OrderDate) AS Month,\n    COUNT(*) AS OrderCount\nFROM \n    SALES\nGROUP BY \n    EXTRACT(MONTH FROM OrderDate)\nORDER BY \n    Month;\n\n-- Revenue trend by month\nSELECT \n    EXTRACT(MONTH FROM OrderDate) AS Month,\n    SUM(Quantity * UnitPriceUSD) AS Revenue\nFROM \n    SALES\nJOIN \n    PRODUCTS ON SALES.ProductKey = PRODUCTS.ProductKey\nGROUP BY \n    EXTRACT(MONTH FROM OrderDate)\nORDER BY \n    Month;\n",
 					"metadata": {
 						"language": "sql"
 					},
@@ -154,17 +154,17 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script ExTable Exchange_Rates')]",
+			"name": "[concat(parameters('workspaceName'), '/SQL script 6')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseDelimitedTextFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseDelimitedTextFormat] \n\tWITH ( FORMAT_TYPE = DELIMITEDTEXT ,\n\t       FORMAT_OPTIONS (\n\t\t\t FIELD_TERMINATOR = ',',\n\t\t\t USE_TYPE_DEFAULT = FALSE\n\t\t\t))\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'global-electronic-files_globalelectronicsadls_dfs_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [global-electronic-files_globalelectronicsadls_dfs_core_windows_net] \n\tWITH (\n\t\tLOCATION = 'abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net' \n\t)\nGO\n\nCREATE EXTERNAL TABLE dbo.Exchange_Rates (\n\t[C1] nvarchar(4000),\n\t[C2] nvarchar(4000),\n\t[C3] nvarchar(4000)\n\t)\n\tWITH (\n\tLOCATION = 'Global Electronics Retailers/Exchange_Rates.csv',\n\tDATA_SOURCE = [global-electronic-files_globalelectronicsadls_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseDelimitedTextFormat]\n\t)\nGO\n\n\nSELECT TOP 100 * FROM dbo.Exchange_Rates\nGO",
+					"query": "-- This is auto-generated code\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://globalelectronicsadls.dfs.core.windows.net/global-electronic-files/Global Electronics Retailers/Customers.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION = '2.0'\n    ) AS [result]\n",
 					"metadata": {
 						"language": "sql"
 					},
 					"currentConnection": {
-						"databaseName": "ServerlessP1",
+						"databaseName": "master",
 						"poolName": "Built-in"
 					},
 					"resultLimit": 5000
@@ -174,72 +174,12 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script ExTable Products')]",
+			"name": "[concat(parameters('workspaceName'), '/SQL script Ex TableSales')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseDelimitedTextFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseDelimitedTextFormat] \n\tWITH ( FORMAT_TYPE = DELIMITEDTEXT ,\n\t       FORMAT_OPTIONS (\n\t\t\t FIELD_TERMINATOR = ',',\n\t\t\t USE_TYPE_DEFAULT = FALSE\n\t\t\t))\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'global-electronic-files_globalelectronicsadls_dfs_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [global-electronic-files_globalelectronicsadls_dfs_core_windows_net] \n\tWITH (\n\t\tLOCATION = 'abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net' \n\t)\nGO\n\nCREATE EXTERNAL TABLE dbo.Products (\n\t[C1] nvarchar(4000),\n\t[C2] nvarchar(4000),\n\t[C3] nvarchar(4000),\n\t[C4] nvarchar(4000),\n\t[C5] nvarchar(4000),\n\t[C6] nvarchar(4000),\n\t[C7] nvarchar(4000),\n\t[C8] nvarchar(4000),\n\t[C9] nvarchar(4000),\n\t[C10] nvarchar(4000)\n\t)\n\tWITH (\n\tLOCATION = 'Global Electronics Retailers/Products.csv',\n\tDATA_SOURCE = [global-electronic-files_globalelectronicsadls_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseDelimitedTextFormat]\n\t)\nGO\n\n\nSELECT TOP 100 * FROM dbo.Products\nGO",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"databaseName": "ServerlessP1",
-						"poolName": "Built-in"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script ExTable Sales')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseDelimitedTextFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseDelimitedTextFormat] \n\tWITH ( FORMAT_TYPE = DELIMITEDTEXT ,\n\t       FORMAT_OPTIONS (\n\t\t\t FIELD_TERMINATOR = ',',\n\t\t\t USE_TYPE_DEFAULT = FALSE\n\t\t\t))\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'global-electronic-files_globalelectronicsadls_dfs_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [global-electronic-files_globalelectronicsadls_dfs_core_windows_net] \n\tWITH (\n\t\tLOCATION = 'abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net' \n\t)\nGO\n\nCREATE EXTERNAL TABLE dbo.Sales (\n\t[C1] nvarchar(4000),\n\t[C2] nvarchar(4000),\n\t[C3] nvarchar(4000),\n\t[C4] nvarchar(4000),\n\t[C5] nvarchar(4000),\n\t[C6] nvarchar(4000),\n\t[C7] nvarchar(4000),\n\t[C8] nvarchar(4000),\n\t[C9] nvarchar(4000)\n\t)\n\tWITH (\n\tLOCATION = 'Global Electronics Retailers/Sales.csv',\n\tDATA_SOURCE = [global-electronic-files_globalelectronicsadls_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseDelimitedTextFormat]\n\t)\nGO\n\n\nSELECT TOP 100 * FROM dbo.Sales\nGO",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"databaseName": "ServerlessP1",
-						"poolName": "Built-in"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script ExTable Stores')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseDelimitedTextFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseDelimitedTextFormat] \n\tWITH ( FORMAT_TYPE = DELIMITEDTEXT ,\n\t       FORMAT_OPTIONS (\n\t\t\t FIELD_TERMINATOR = ',',\n\t\t\t USE_TYPE_DEFAULT = FALSE\n\t\t\t))\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'global-electronic-files_globalelectronicsadls_dfs_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [global-electronic-files_globalelectronicsadls_dfs_core_windows_net] \n\tWITH (\n\t\tLOCATION = 'abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net' \n\t)\nGO\n\nCREATE EXTERNAL TABLE dbo.Stores (\n\t[C1] nvarchar(4000),\n\t[C2] nvarchar(4000),\n\t[C3] nvarchar(4000),\n\t[C4] nvarchar(4000),\n\t[C5] nvarchar(4000)\n\t)\n\tWITH (\n\tLOCATION = 'Global Electronics Retailers/Stores.csv',\n\tDATA_SOURCE = [global-electronic-files_globalelectronicsadls_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseDelimitedTextFormat]\n\t)\nGO\n\n\nSELECT TOP 100 * FROM dbo.Stores\nGO",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"databaseName": "ServerlessP1",
-						"poolName": "Built-in"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/SQL scripte ExTableCustomers')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseDelimitedTextFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseDelimitedTextFormat] \n\tWITH ( FORMAT_TYPE = DELIMITEDTEXT ,\n\t       FORMAT_OPTIONS (\n\t\t\t FIELD_TERMINATOR = ',',\n\t\t\t USE_TYPE_DEFAULT = FALSE\n\t\t\t))\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'global-electronic-files_globalelectronicsadls_dfs_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [global-electronic-files_globalelectronicsadls_dfs_core_windows_net] \n\tWITH (\n\t\tLOCATION = 'abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net' \n\t)\nGO\n\nCREATE EXTERNAL TABLE dbo.Customers (\n\t[C1] nvarchar(4000),\n\t[C2] nvarchar(4000),\n\t[C3] nvarchar(4000),\n\t[C4] nvarchar(4000),\n\t[C5] nvarchar(4000),\n\t[C6] nvarchar(4000),\n\t[C7] nvarchar(4000),\n\t[C8] nvarchar(4000),\n\t[C9] nvarchar(4000),\n\t[C10] nvarchar(4000)\n\t)\n\tWITH (\n\tLOCATION = 'Global Electronics Retailers/Customers.csv',\n\tDATA_SOURCE = [global-electronic-files_globalelectronicsadls_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseDelimitedTextFormat]\n\t)\nGO\n\n\nSELECT TOP 100 * FROM dbo.Customers\nGO",
+					"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] \n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'global-electronic-files_globalelectronicsadls_dfs_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [global-electronic-files_globalelectronicsadls_dfs_core_windows_net] \n\tWITH (\n\t\tLOCATION = 'abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net' \n\t)\nGO\n\nCREATE EXTERNAL TABLE dbo.Sales (\n\t[Order Number] nvarchar(4000),\n\t[Line Item] nvarchar(4000),\n\t[Order Date] nvarchar(4000),\n\t[Delivery Date] nvarchar(4000),\n\t[CustomerKey] nvarchar(4000),\n\t[StoreKey] nvarchar(4000),\n\t[ProductKey] nvarchar(4000),\n\t[Quantity] nvarchar(4000),\n\t[Currency Code] nvarchar(4000)\n\t)\n\tWITH (\n\tLOCATION = 'GlobalElectronicTrainingData/SalesTrainingData/part-00000-ebfab0e3-6522-44f8-946f-74e71ff4ac7e-c000.snappy.parquet',\n\tDATA_SOURCE = [global-electronic-files_globalelectronicsadls_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\nselect * from dbo.sales where StoreKey='10'\nSELECT TOP 100 * FROM dbo.Sales\nGO",
 					"metadata": {
 						"language": "sql"
 					},
@@ -275,7 +215,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "89bb2298-91b0-45b0-962a-4bc409836280"
+						"spark.autotune.trackingId": "f111c718-53e6-4bb6-8591-2dd4ef4d9e27"
 					}
 				},
 				"metadata": {
@@ -322,7 +262,7 @@
 							"display(df.limit(10))"
 						],
 						"outputs": [],
-						"execution_count": 5
+						"execution_count": 8
 					},
 					{
 						"cell_type": "code",
@@ -338,10 +278,10 @@
 							}
 						},
 						"source": [
-							"df.write.partitionBy(\"PRODUCTKEY\").csv('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/GlobalElectronicTrainingData/partionedData',mode='overwrite')"
+							"df.write.parquet('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/GlobalElectronicTrainingData/SalesTrainingData', mode='overwrite')"
 						],
 						"outputs": [],
-						"execution_count": 6
+						"execution_count": 11
 					},
 					{
 						"cell_type": "code",
@@ -354,10 +294,18 @@
 								"transient": {
 									"deleting": false
 								}
+							},
+							"microsoft": {
+								"language": "python"
 							}
 						},
 						"source": [
-							""
+							"%%pyspark\n",
+							"df = spark.read.load('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/Global Electronics Retailers/Sales.csv', format='csv'\n",
+							"## If header exists uncomment line below\n",
+							", header=True\n",
+							")\n",
+							"display(df.limit(10))"
 						],
 						"outputs": [],
 						"execution_count": null
@@ -390,19 +338,6 @@
 			},
 			"dependsOn": [],
 			"location": "eastus2"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script 5')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"metadata": {
-						"language": "sql"
-					}
-				}
-			},
-			"dependsOn": []
 		}
 	]
 }
