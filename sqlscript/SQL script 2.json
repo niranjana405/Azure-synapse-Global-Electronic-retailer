@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 2",
+	"properties": {
+		"content": {
+			"query": "-- This is auto-generated code\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://globalelectronicsadls.dfs.core.windows.net/global-electronic-files/GlobalElectronicTrainingData/partionedData/.spark-staging-5f4584ee-34ce-404d-9358-d40a11299647/_temporary/0/_temporary/attempt_202405081323265526030814054800310_0004_m_000000_4/PRODUCTKEY=1/part-00000-5f4584ee-34ce-404d-9358-d40a11299647.c000.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION = '2.0'\n    ) AS [result]\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
