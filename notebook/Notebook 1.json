@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "291b58f0-a964-4c45-9194-7754acbb33df"
+				"spark.autotune.trackingId": "d6560637-d94c-44e1-b007-f7108919e84a"
 			}
 		},
 		"metadata": {
@@ -99,17 +99,171 @@
 					},
 					"microsoft": {
 						"language": "python"
-					}
+					},
+					"collapsed": false
 				},
 				"source": [
 					"%%pyspark\n",
-					"df = spark.read.load('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/Global Electronics Retailers/Sales.csv', format='csv'\n",
+					"customers = spark.read.load('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/Global Electronics Retailers/Customers.csv', format='csv'\n",
 					"## If header exists uncomment line below\n",
 					", header=True\n",
 					")\n",
 					"display(df.limit(10))"
 				],
 				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"customers.write.parquet('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/GlobalElectronicTrainingData/CustomersTrainingData', mode='overwrite')"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%pyspark\n",
+					"Exchange_rates = spark.read.load('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/Global Electronics Retailers/Exchange_Rates.csv', format='csv'\n",
+					"## If header exists uncomment line below\n",
+					", header=True\n",
+					")\n",
+					"display(df.limit(10))"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"Exchange_rates.write.parquet('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/GlobalElectronicTrainingData/Exchange_ratesTrainingData', mode='overwrite')"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%pyspark\n",
+					"Products = spark.read.load('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/Global Electronics Retailers/Products.csv', format='csv'\n",
+					"## If header exists uncomment line below\n",
+					", header=True\n",
+					")\n",
+					"display(df.limit(10))"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"Products.write.parquet('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/GlobalElectronicTrainingData/ProductsTrainingData', mode='overwrite')"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%pyspark\n",
+					"Stores = spark.read.load('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/Global Electronics Retailers/Stores.csv', format='csv'\n",
+					"## If header exists uncomment line below\n",
+					", header=True\n",
+					")\n",
+					"display(df.limit(10))"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"Stores.write.parquet('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/GlobalElectronicTrainingData/StoresTrainingData', mode='overwrite')"
+				],
+				"execution_count": 20
 			}
 		]
 	}
