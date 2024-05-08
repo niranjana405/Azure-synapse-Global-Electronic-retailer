@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 5",
+	"properties": {
+		"content": {
+			"query": "-- Order volume trend by month\nSELECT \n    EXTRACT(MONTH FROM OrderDate) AS Month,\n    COUNT(*) AS OrderCount\nFROM \n    SALES\nGROUP BY \n    EXTRACT(MONTH FROM OrderDate)\nORDER BY \n    Month;\n\n-- Revenue trend by month\nSELECT \n    EXTRACT(MONTH FROM OrderDate) AS Month,\n    SUM(Quantity * UnitPriceUSD) AS Revenue\nFROM \n    SALES\nJOIN \n    PRODUCTS ON SALES.ProductKey = PRODUCTS.ProductKey\nGROUP BY \n    EXTRACT(MONTH FROM OrderDate)\nORDER BY \n    Month;\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

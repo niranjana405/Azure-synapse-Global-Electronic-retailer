@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "89bb2298-91b0-45b0-962a-4bc409836280"
+				"spark.autotune.trackingId": "f111c718-53e6-4bb6-8591-2dd4ef4d9e27"
 			}
 		},
 		"metadata": {
@@ -65,7 +65,7 @@
 					")\r\n",
 					"display(df.limit(10))"
 				],
-				"execution_count": 5
+				"execution_count": 8
 			},
 			{
 				"cell_type": "code",
@@ -81,9 +81,9 @@
 					}
 				},
 				"source": [
-					"df.write.partitionBy(\"PRODUCTKEY\").csv('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/GlobalElectronicTrainingData/partionedData',mode='overwrite')"
+					"df.write.parquet('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/GlobalElectronicTrainingData/SalesTrainingData', mode='overwrite')"
 				],
-				"execution_count": 6
+				"execution_count": 11
 			},
 			{
 				"cell_type": "code",
@@ -96,10 +96,18 @@
 						"transient": {
 							"deleting": false
 						}
+					},
+					"microsoft": {
+						"language": "python"
 					}
 				},
 				"source": [
-					""
+					"%%pyspark\n",
+					"df = spark.read.load('abfss://global-electronic-files@globalelectronicsadls.dfs.core.windows.net/Global Electronics Retailers/Sales.csv', format='csv'\n",
+					"## If header exists uncomment line below\n",
+					", header=True\n",
+					")\n",
+					"display(df.limit(10))"
 				],
 				"execution_count": null
 			}
